@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,8 +38,27 @@ public class MainActivity extends AppCompatActivity {
                         android.R.layout.simple_spinner_item, nombres);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
-                spinner.setTag(R.id.col,j);
-                spinner.setTag(R.id.fila,i);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        // la posició del spinner és 'i', però també es pot buscar amb
+                        String string = spinner.getSelectedItem().toString();
+                        int fila = (int) adapterView.getTag(R.id.fila);
+                        int col = (int) adapterView.getTag(R.id.col);
+                        spinner.setTag(R.id.col,col);
+                        spinner.setTag(R.id.fila,fila);
+                        Toast toast1 =
+                                    Toast.makeText(getApplicationContext(),
+                                            "Toast por defecto", Toast.LENGTH_SHORT);
+
+                            toast1.show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
                 row.addView(spinner);
                 row.setLayoutParams(params1);
             }
@@ -47,24 +67,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
-        protected void onCreate(Bundle savedInstanceState) {
-
-            super.onCreate(savedInstanceState);
-            Spinner spinner = new Spinner(this);
-            spinner.setOnItemSelectedListener(this);
-
-        }
-
-        public void onItemSelected(AdapterView<?> parent, View view,
-                                   int pos, long id) {
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
-    }
 }
