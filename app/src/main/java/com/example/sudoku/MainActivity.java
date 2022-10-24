@@ -20,17 +20,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int[][] values = new int[9][9];
+        Spinner[][] spinners = new Spinner[9][9];
         TableLayout table = (TableLayout) findViewById(R.id.textView);
         CharSequence[] nombres = {"|   |","1","2","3","4","5","6","7","8","9"};
         table.setDividerPadding(10);
+
         for(int i=0;i<9;i++) {
             TableRow.LayoutParams  params1=new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT,10.0f);
             TableRow row=new TableRow(this);
-
             for(int j=0;j<9;j++) {
-                values[i][j]=j;
                 Spinner spinner = new Spinner(this);
+                spinners[i][j]=spinner;
                 spinner.setBackground(null);
                 spinner.setPadding(5, 5, 5, 5);
 
@@ -38,20 +38,29 @@ public class MainActivity extends AppCompatActivity {
                         android.R.layout.simple_spinner_item, nombres);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
+                spinner.setTag("bug init");
+                spinner.setTag(R.id.col,j);
+                spinner.setTag(R.id.fila,i);
+                row.addView(spinners[i][j]);
+                row.setLayoutParams(params1);
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         // la posició del spinner és 'i', però també es pot buscar amb
-                        String string = spinner.getSelectedItem().toString();
+                        //String string = adapterView.getSelectedItem().toString();
                         int fila = (int) adapterView.getTag(R.id.fila);
                         int col = (int) adapterView.getTag(R.id.col);
-                        spinner.setTag(R.id.col,col);
-                        spinner.setTag(R.id.fila,fila);
-                        Toast toast1 =
+                        if (spinner.getTag().equals("bug init")) {
+                            spinner.setTag("okay, no more bug");
+                        }
+                        else {
+                            Toast toast1 =
                                     Toast.makeText(getApplicationContext(),
-                                            "Toast por defecto", Toast.LENGTH_SHORT);
+                                            "Columna: "+col+" Fila: "+fila, Toast.LENGTH_SHORT);
 
                             toast1.show();
+                        }
+
                     }
 
                     @Override
@@ -59,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-                row.addView(spinner);
-                row.setLayoutParams(params1);
+
             }
             table.addView(row);
         }
