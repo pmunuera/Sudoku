@@ -21,9 +21,9 @@ public class SudokuModel {
         }
     }
     public boolean comprovaFila(int fila){
-        for(int i=0;i<values[fila].length;i++){
-            for(int j=i+1;j<values[fila].length;j++) {
-                if (values[fila][i]==values[fila][j]) {
+        for(int i=0;i<(values[fila].length);i++){
+            for(int j=i+1;j<(values[fila].length);j++) {
+                if (values[fila][i]==values[fila][j]&&values[fila][i]!=0) {
                     return false;
                 }
             }
@@ -34,7 +34,7 @@ public class SudokuModel {
     public boolean comprovaColumna(int columna){
         for(int i=0;i<9;i++){
             for(int j=i+1;j<9;j++) {
-                if (values[i][columna]==values[j][columna]) {
+                if (values[i][columna]==values[j][columna]&&values[i][columna]!=0) {
                     return false;
                 }
             }
@@ -48,11 +48,11 @@ public class SudokuModel {
     public void creaPartida(){
         int contador=0;
         while(contador<20){
-            int randomValor= (int)(Math.random()*(1-9));
-            int randomFila= (int)(Math.random()*(1-9));
-            int randomColumna= (int)(Math.random()*(1-9));
+            int randomValor= (int)(Math.random()*(9-1));
+            int randomFila= (int)(Math.random()*(9-1));
+            int randomColumna= (int)(Math.random()*(9-1));
             int correcte=0;
-            if(comprovaFila(randomFila)&&comprovaColumna(randomColumna)) {
+            if(comprovaFila(randomFila)==true&&comprovaColumna(randomColumna)==true) {
                 correcte = this.setVal(randomValor, randomFila, randomColumna);
             }
             if(correcte==randomValor){
