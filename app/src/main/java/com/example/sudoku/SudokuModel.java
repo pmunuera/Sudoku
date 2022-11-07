@@ -12,7 +12,7 @@ public class SudokuModel {
         return values[fila][columna];
     }
     public int setVal(int valor,int fila,int columna){
-        if(getVal(fila,columna)==0){
+        if(comprovaFila(fila,valor)==true&&comprovaColumna(columna,valor)==true){
             values[fila][columna]=valor;
             return valor;
         }
@@ -20,44 +20,46 @@ public class SudokuModel {
             return -1;
         }
     }
-    public boolean comprovaFila(int fila){
+    public boolean comprovaFila(int fila,int valor){
         for(int i=0;i<(values[fila].length);i++){
-            for(int j=i+1;j<(values[fila].length);j++) {
-                if (values[fila][i]==values[fila][j]&&values[fila][i]!=0) {
+                if (values[fila][i]==valor&&values[fila][i]!=0) {
                     return false;
                 }
             }
-        }
-
         return true;
     }
-    public boolean comprovaColumna(int columna){
+
+    public boolean comprovaColumna(int columna,int valor){
         for(int i=0;i<9;i++){
-            for(int j=i+1;j<9;j++) {
-                if (values[i][columna]==values[j][columna]&&values[i][columna]!=0) {
+            if (values[i][columna]==valor&&values[i][columna]!=0) {
                     return false;
-                }
             }
         }
 
         return true;
     }
+
     public boolean comprovaQuad(){
         return true;
     }
     public void creaPartida(){
         int contador=0;
-        while(contador<20){
-            int randomValor= (int)(Math.random()*(9-1));
-            int randomFila= (int)(Math.random()*(9-1));
-            int randomColumna= (int)(Math.random()*(9-1));
-            int correcte=0;
-            if(comprovaFila(randomFila)==true&&comprovaColumna(randomColumna)==true) {
-                correcte = this.setVal(randomValor, randomFila, randomColumna);
-            }
-            if(correcte==randomValor){
-                contador++;
+        for(int i=0;i<9;i++) {
+            for (int j = 0; j < 9; j++) {
+                values[i][j] = 0;
             }
         }
-    }
+            while (contador < 20) {
+                int randomValor = (int) (Math.random() * (9 + 1));
+                int randomFila = (int) (Math.random() * (9 - 1));
+                int randomColumna = (int) (Math.random() * (9 - 1));
+                int correcte = 0;
+                if (comprovaFila(randomFila, randomValor) == true && comprovaColumna(randomColumna, randomValor) == true) {
+                    correcte = this.setVal(randomValor, randomFila, randomColumna);
+                }
+                if (correcte == randomValor) {
+                    contador++;
+                }
+            }
+        }
 }

@@ -23,11 +23,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Spinner[][] spinners = new Spinner[9][9];
         TableLayout table = (TableLayout) findViewById(R.id.textView);
         CharSequence[] nombres = {"0","1","2","3","4","5","6","7","8","9"};
-        table.setDividerPadding(10);
         SudokuModel sudoku = new SudokuModel();
+
+        table.setDividerPadding(10);
+        refresh(spinners,table,nombres,sudoku);
+        Button b2 = findViewById(R.id.button);
+        b2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                refresh(spinners,table,nombres,sudoku);
+            }
+        });
+    }
+    public void refresh(Spinner[][] spinners,TableLayout table,CharSequence[] nombres,SudokuModel sudoku){
+        table.removeAllViews();
         sudoku.creaPartida();
         for(int i=0;i<9;i++) {
             TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 10.0f);
@@ -59,23 +71,25 @@ public class MainActivity extends AppCompatActivity {
                             if (spinner.getTag().equals("bug init")) {
                                 spinner.setTag("okay, no more bug");
                             } else {
+                                int correcte = sudoku.setVal(Integer.parseInt(String.valueOf(spinner.getSelectedItem())),fila,col);
+                                if(correcte==-1){
+                                    spinner.setAdapter(adapter);
+                                    spinners[fila][col] = spinner;
+                                    Toast toast1 =
+                                            Toast.makeText(getApplicationContext(),
+                                                    "No es pot", Toast.LENGTH_SHORT);
 
-                                Toast toast1 =
-                                        Toast.makeText(getApplicationContext(),
-                                                "Columna: " + col + " Fila: " + fila, Toast.LENGTH_SHORT);
-
-                                toast1.show();
+                                    toast1.show();
+                                }
                             }
-
                         }
-
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
 
                         }
                     });
                 }
-            else{
+                else{
                     Spinner spinner = new Spinner(this);
                     spinners[i][j] = spinner;
                     spinner.setBackgroundColor(Color.LTGRAY);
@@ -94,13 +108,5 @@ public class MainActivity extends AppCompatActivity {
             }
             table.addView(row);
         }
-        Button b2 = findViewById(R.id.button);
-        b2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
-
 }
