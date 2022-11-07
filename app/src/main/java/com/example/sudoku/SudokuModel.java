@@ -54,6 +54,10 @@ public class SudokuModel {
                 int randomFila = (int) (Math.random() * (9 - 1));
                 int randomColumna = (int) (Math.random() * (9 - 1));
                 int correcte = 0;
+                if(values[randomFila][randomColumna]!=0){
+                   continue;
+                }
+
                 if (comprovaFila(randomFila, randomValor) == true && comprovaColumna(randomColumna, randomValor) == true) {
                     correcte = this.setVal(randomValor, randomFila, randomColumna);
                 }
